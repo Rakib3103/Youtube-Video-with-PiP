@@ -10,7 +10,7 @@ function onYouTubeIframeAPIReady() {
 }
 
 function onPlayerReady(event) {
-  // Additional features can be added here
+  console.log("Player is ready.");
 }
 
 // Check if video container is in the viewport
@@ -35,11 +35,15 @@ const videoContainer = document.getElementById("videoContainer");
 const playPauseButton = document.createElement("button");
 playPauseButton.innerText = "Play/Pause";
 playPauseButton.onclick = () => {
-  const state = player.getPlayerState();
-  if (state === 1) {
-    player.pauseVideo();
+  if (player && typeof player.getPlayerState === "function") {
+    const state = player.getPlayerState();
+    if (state === 1) {
+      player.pauseVideo();
+    } else {
+      player.playVideo();
+    }
   } else {
-    player.playVideo();
+    console.error("Player object not initialized or getPlayerState method not available.");
   }
 };
 
@@ -50,17 +54,23 @@ volumeControl.min = 0;
 volumeControl.max = 100;
 volumeControl.value = 50;
 volumeControl.oninput = (event) => {
-  player.setVolume(event.target.value);
+  if (player && typeof player.setVolume === "function") {
+    player.setVolume(event.target.value);
+  }
 };
 
 // Mute button
 const muteButton = document.createElement("button");
 muteButton.innerText = "Mute/Unmute";
 muteButton.onclick = () => {
-  if (player.isMuted()) {
-    player.unMute();
+  if (player && typeof player.isMuted === "function") {
+    if (player.isMuted()) {
+      player.unMute();
+    } else {
+      player.mute();
+    }
   } else {
-    player.mute();
+    console.error("Player object not initialized or mute-related methods not available.");
   }
 };
 
