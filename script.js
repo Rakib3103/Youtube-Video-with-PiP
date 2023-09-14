@@ -79,18 +79,46 @@ videoContainer.appendChild(playPauseButton);
 videoContainer.appendChild(volumeControl);
 videoContainer.appendChild(muteButton);
 
+let timer;
+
+function isInViewport(element) {
+  const rect = element.getBoundingClientRect();
+  return rect.top >= 0 && rect.bottom <= window.innerHeight;
+}
+
 // Scroll event to toggle PiP mode
 window.addEventListener("scroll", () => {
-  if (!isInViewport(videoContainer)) {
-    enablePiPMode();
-  } else {
-    disablePiPMode();
-  }
+  clearTimeout(timer);
+
+  timer = setTimeout(() => {
+    const scrolled = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const docHeight = document.body.scrollHeight;
+
+    // Keep PiP mode if scrolling near the bottom
+    if (docHeight - scrolled - windowHeight <= 100) {
+      return;
+    }
+
+    // Check if video is entirely in viewport
+    if (isInViewport(videoContainer)) {
+      disablePiPMode();
+    } else {
+      enablePiPMode();
+    }
+  }, 100);  // debounce for 100 milliseconds
 });
 
+
 // Exit PiP mode on click
-videoContainer.addEventListener("click", function() {
+// Exit PiP mode on click
+videoContainer.addEventListener("click", function(event) {
+  if (event.target === playPauseButton || event.target === muteButton || event.target === volumeControl) {
+    return;  // Ignore clicks on play/pause and mute buttons
+  }
+
   if (videoContainer.classList.contains("pip-mode")) {
     disablePiPMode();
   }
 });
+
