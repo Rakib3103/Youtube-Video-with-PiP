@@ -116,7 +116,7 @@ window.addEventListener("scroll", () => {                               // Sets 
 // Exit PiP mode on click
 videoContainer.addEventListener("click", function(event) {
   if (event.target === playPauseButton || event.target === muteButton || event.target === volumeControl) {
-    return;  // Ignore clicks on play/pause and mute buttons
+    return;  // Ignore clicks on play/pause , mute buttons and volume control bar
   }
 
   if (videoContainer.classList.contains("pip-mode")) {
@@ -125,35 +125,41 @@ videoContainer.addEventListener("click", function(event) {
 });
 
 // Variables to store mouse position and PiP window position
-let isDragging = false;
-let initialMouseX;
-let initialMouseY;
-let initialWindowX;
-let initialWindowY;
+let isDragging = false;         // A boolean flag at the initial page load
+let initialMouseX;              // Store initial pos of pointer
+let initialMouseY;              // Store initial pos of pointer
+let initialWindowX;             // Store initial pos of event dragged
+let initialWindowY;             // Store initial pos of event dragged
 
 // Function to start dragging
 function startDrag(event) {
-  isDragging = true;
+  isDragging = true;                  // If true then recieve X and Y coordinate from eventt and change the pos
   initialMouseX = event.clientX;
   initialMouseY = event.clientY;
-  initialWindowX = videoContainer.offsetLeft;
+  initialWindowX = videoContainer.offsetLeft;       // Captures the pos of video container
   initialWindowY = videoContainer.offsetTop;
 }
 
 // Function to stop dragging
 function stopDrag() {
-  isDragging = false;
+  isDragging = false;                         // Dragging stop when Flag === False
 }
 
 // Function to handle dragging
 function handleDrag(event) {
   if (isDragging) {
-    const deltaX = event.clientX - initialMouseX;
+
+// Our approach calculates the horizontal X-axis and Y-axis distance that the mouse has moved since the start of the drag operation. 
+// It subtracts the initial horizontal mouse position (initialMouseX & initialMouseY) recorded when the drag operation started from the current horizontal & vertical mouse position (event.clientX & Y) during the drag operation. 
+// This difference represents how much the mouse has moved horizontally during the drag.
+    const deltaX = event.clientX - initialMouseX;  
     const deltaY = event.clientY - initialMouseY;
+// Now we calculate the new vertical & horizontal position (newWindowY & X) for the draggable element by adding the vertical movement (deltaY & X) to the initial vertical & horizontal position (initialWindowY & X). 
+// It represents the updated top offset of the element relative to its parent container.
     const newWindowX = initialWindowX + deltaX;
     const newWindowY = initialWindowY + deltaY;
     
-    // Setting the new position of the PiP window
+    // Setting the new position of the PiP window. We are changing to left and top cause by default PiP mode is set to the right bottom.
     videoContainer.style.left = newWindowX + 'px';
     videoContainer.style.top = newWindowY + 'px';
   }
