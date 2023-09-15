@@ -122,3 +122,43 @@ videoContainer.addEventListener("click", function(event) {
   }
 });
 
+// Variables to store mouse position and PiP window position
+let isDragging = false;
+let initialMouseX;
+let initialMouseY;
+let initialWindowX;
+let initialWindowY;
+
+// Function to start dragging
+function startDrag(event) {
+  isDragging = true;
+  initialMouseX = event.clientX;
+  initialMouseY = event.clientY;
+  initialWindowX = videoContainer.offsetLeft;
+  initialWindowY = videoContainer.offsetTop;
+}
+
+// Function to stop dragging
+function stopDrag() {
+  isDragging = false;
+}
+
+// Function to handle dragging
+function handleDrag(event) {
+  if (isDragging) {
+    const deltaX = event.clientX - initialMouseX;
+    const deltaY = event.clientY - initialMouseY;
+    const newWindowX = initialWindowX + deltaX;
+    const newWindowY = initialWindowY + deltaY;
+    
+    // Set the new position of the PiP window
+    videoContainer.style.left = newWindowX + 'px';
+    videoContainer.style.top = newWindowY + 'px';
+  }
+}
+
+// Add event listeners to enable dragging
+videoContainer.addEventListener("mousedown", startDrag);
+document.addEventListener("mouseup", stopDrag);
+document.addEventListener("mousemove", handleDrag);
+
