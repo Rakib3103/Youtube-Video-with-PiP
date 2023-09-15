@@ -6,4 +6,7 @@ Steps:-
  * Make sure you have installed the Extension (Live Server).
  * Right Click on your mouse and click on Open with Live server.
  * Done! The assignment is visual and functional.
+
 N.B: I could've added the routing/hosting via PhP or React but as It wasn't mentioned in the question, I skipped it for ensuring testing friendliness.
+
+If you want to test if the PiP window is dragable or not. Make sure you are dragging by clicking the *GREY* border of the window preview. 
